@@ -35,7 +35,7 @@ COPY . .
 
 # Copy custom model weights if they exist (build-time COPY won't fail if missing)
 # Place your fine-tuned best.pt at ai-service/models/best.pt before docker build
-COPY models/ /app/models/ 2>/dev/null || true
+COPY models/ /app/models/
 
 # Expose FastAPI port
 EXPOSE 8000

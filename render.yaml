@@ -1,0 +1,47 @@
+# render.yaml — Infrastructure as Code for Render.com
+# Defines both the Express API server and the FastAPI AI service.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # ─── Express API Server ────────────────────────────────────────────────────
+  - type: web
+    name: civicsense-server
+    runtime: node
+    region: oregon
+    plan: free                          # Upgrade to Starter ($7/mo) for production
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: node dist/index.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000                    # Render assigns this automatically; keep in sync
+      - key: MONGO_URI
+        sync: false                     # Set manually in Render dashboard — do NOT commit
+      - key: JWT_SECRET
+        sync: false                     # Set manually in Render dashboard — do NOT commit
+      - key: ALLOWED_ORIGINS
+        sync: false                     # e.g. https://civicsense.vercel.app
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: AI_SERVICE_URL
+        sync: false                     # e.g. https://civicsense-ai.onrender.com
+
+  # ─── FastAPI AI Service ────────────────────────────────────────────────────
+  - type: web
+    name: civicsense-ai
+    runtime: docker
+    region: oregon
+    plan: free                          # Upgrade to Standard ($25/mo) for GPU workloads
+    rootDir: ai-service
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000

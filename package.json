@@ -1,0 +1,15 @@
+{
+  "name": "civicsense-monorepo",
+  "version": "1.0.0",
+  "description": "CivicSense Monorepo: Client, Server, and AI Service",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev -w client",
+    "dev:server": "npm run dev -w server",
+    "dev:ai": "cd ai-service && ./venv/bin/uvicorn main:app --port 8000 --reload"
+  }
+}

@@ -1,0 +1,24 @@
+# Docker ignore for ai-service
+# Keeps the build context small and prevents secrets from being baked in
+
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+*.log
+
+# Exclude large model files from build context.
+# The stock yolov8n.pt is downloaded at build time via Dockerfile.
+# Only include custom fine-tuned weights if they exist in models/:
+# models/*.pt         ← keep  (custom weights, small path)
+# Remove this line if you want to COPY your best.pt from models/:
+# models/

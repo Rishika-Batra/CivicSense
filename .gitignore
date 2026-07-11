@@ -15,7 +15,8 @@ env/
 ENV/
 bin/
 include/
-lib/
+ai-service/venv/lib/
+ai-service/lib/
 lib64/
 share/
 __pycache__/

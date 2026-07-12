@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ─── Stage 2: Model Download ──────────────────────────────────────────────────
 # The stock YOLOv8n weights (~6 MB) are downloaded at build time so the
 # container starts instantly without hitting the network at runtime.
-# If you have custom fine-tuned weights (best.pt), place them in
+# If you have custom fine-tuned weights (best.onnx), place them in
 # ai-service/models/ before building and they will be copied in below.
 RUN python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')" && \
     mkdir -p /app/models && \
@@ -34,7 +34,7 @@ RUN python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')" && \
 COPY . .
 
 # Copy custom model weights if they exist (build-time COPY won't fail if missing)
-# Place your fine-tuned best.pt at ai-service/models/best.pt before docker build
+# Place your fine-tuned best.onnx at ai-service/models/best.onnx before docker build
 COPY models/ /app/models/
 
 # Expose FastAPI port

@@ -23,7 +23,7 @@ app.add_middleware(
 # ─── Model Selection & Loading ────────────────────────────────────────────────
 
 MODEL_DIR = "./models"
-CUSTOM_MODEL_PATH = os.path.join(MODEL_DIR, "best.pt")
+CUSTOM_MODEL_PATH = os.path.join(MODEL_DIR, "best.onnx")
 STOCK_MODEL_NAME = "yolov8n.pt"
 
 # Ensure models directory exists
@@ -31,20 +31,20 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 
 # Select the model path (custom weights or fallback to stock yolov8n)
 if os.path.exists(CUSTOM_MODEL_PATH):
-    print(f"📦 Loading custom fine-tuned model from {CUSTOM_MODEL_PATH}...")
+    print(f"📦 Loading custom fine-tuned ONNX model from {CUSTOM_MODEL_PATH}...")
     model_path = CUSTOM_MODEL_PATH
     is_custom = True
 else:
-    print(f"📦 Custom model not found at {CUSTOM_MODEL_PATH}. Using fallback stock {STOCK_MODEL_NAME}...")
+    print(f"📦 Custom ONNX model not found at {CUSTOM_MODEL_PATH}. Using fallback stock {STOCK_MODEL_NAME}...")
     model_path = STOCK_MODEL_NAME
     is_custom = False
 
 try:
-    model = YOLO(model_path)
+    model = YOLO(model_path, task='detect')
 except Exception as e:
     print(f"❌ Failed to load YOLO model: {e}")
     # Initialize with stock as absolute fallback
-    model = YOLO(STOCK_MODEL_NAME)
+    model = YOLO(STOCK_MODEL_NAME, task='detect')
     is_custom = False
 
 # ─── Category Mappings ────────────────────────────────────────────────────────
@@ -175,6 +175,6 @@ def read_root():
     return {
         "message": "Hello World from CivicSense AI Service",
         "status": "online",
-        "model": "custom-best.pt" if is_custom else "stock-yolov8n.pt",
+        "model": "custom-best.onnx" if is_custom else "stock-yolov8n.pt",
         "timestamp": datetime.datetime.now().isoformat()
     }

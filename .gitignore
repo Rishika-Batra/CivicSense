@@ -50,3 +50,4 @@ htmlcov/
 .env.test.local
 .env.production.local
 *.env
+ai-service/training/

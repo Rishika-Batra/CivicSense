@@ -26,9 +26,11 @@ export const predictCategory = async (
     const blob = new Blob([new Uint8Array(fileBuffer)], { type: 'image/jpeg' })
     formData.append('file', blob, filename)
 
-    // Apply a 5-second AbortController timeout to prevent blocking client requests
+    // Apply a 30-second AbortController timeout to prevent blocking client requests
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 5000)
+    const timeoutId = setTimeout(() => controller.abort(), 30000)
+
+    const startTime = Date.now()
 
     const response = await fetch(`${aiServiceUrl}/predict`, {
       method: 'POST',
@@ -41,6 +43,9 @@ export const predictCategory = async (
     if (!response.ok) {
       throw new Error(`AI Service HTTP error status ${response.status}`)
     }
+
+    const duration = Date.now() - startTime
+    console.log(`✅ AI Service classification succeeded in ${duration}ms`)
 
     const data = (await response.json()) as {
       category: string

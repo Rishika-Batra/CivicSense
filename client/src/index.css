@@ -6,6 +6,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility text-xxs {
+    font-size: 0.65rem;
+    line-height: 0.85rem;
+}
+
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
@@ -128,4 +134,136 @@
   html {
     @apply font-sans;
     }
+}
+
+/* ─── CivicSense Design System ──────────────────────────────────────────────── */
+
+@layer components {
+
+  /* ── Glass card used across all dashboard pages ── */
+  .cs-card {
+    @apply rounded-xl border border-slate-800 bg-slate-900/50 shadow-lg;
+  }
+  .cs-card-inner {
+    @apply rounded-xl border border-slate-800 bg-slate-950/50;
+  }
+
+  /* ── Page header (title + subtitle + badge) ── */
+  .cs-page-header {
+    @apply flex flex-col md:flex-row md:items-end justify-between border-b border-slate-800 pb-6 gap-4;
+  }
+  .cs-section-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider mb-2;
+  }
+  .cs-page-title {
+    @apply text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent;
+  }
+  .cs-page-subtitle {
+    @apply text-sm text-slate-400 mt-1;
+  }
+
+  /* ── Primary emerald/teal button ── */
+  .cs-btn-primary {
+    @apply bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500
+           text-white font-semibold rounded-lg transition duration-200 shadow-lg shadow-teal-900/20;
+  }
+
+  /* ── Secondary/outline button ── */
+  .cs-btn-secondary {
+    @apply bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg transition;
+  }
+
+  /* ── Ghost icon button ── */
+  .cs-btn-ghost {
+    @apply p-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition;
+  }
+
+  /* ── Icon + input field pattern ── */
+  .cs-input {
+    @apply bg-slate-950/50 border-slate-800 focus:border-teal-500/60 text-slate-100 placeholder:text-slate-500;
+  }
+  .cs-label {
+    @apply text-slate-300 text-sm font-medium;
+  }
+  .cs-label-xs {
+    @apply text-xxs uppercase tracking-wider text-slate-500;
+  }
+
+  /* ── Select / native dropdown ── */
+  .cs-select {
+    @apply rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-100
+           focus:border-teal-500/50 focus:outline-none;
+  }
+
+  /* ── Textarea ── */
+  .cs-textarea {
+    @apply w-full rounded-md border border-slate-800 bg-slate-950/50 p-2.5 text-sm text-slate-100
+           focus:border-teal-500/60 focus:outline-none placeholder:text-slate-500;
+  }
+
+  /* ── Status badges ── */
+  .cs-badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border;
+  }
+  .cs-badge-pending {
+    @apply bg-amber-500/10 text-amber-400 border-amber-500/20;
+  }
+  .cs-badge-inprogress {
+    @apply bg-blue-500/10 text-blue-400 border-blue-500/20;
+  }
+  .cs-badge-resolved {
+    @apply bg-emerald-500/10 text-emerald-400 border-emerald-500/20;
+  }
+
+  /* ── Role badges ── */
+  .cs-badge-admin {
+    @apply bg-purple-500/15 text-purple-400 border-purple-500/25;
+  }
+  .cs-badge-officer {
+    @apply bg-teal-500/15 text-teal-400 border-teal-500/25;
+  }
+  .cs-badge-citizen {
+    @apply bg-slate-700/60 text-slate-400 border-slate-700;
+  }
+
+  /* ── Priority badges ── */
+  .cs-badge-critical { @apply bg-red-500/15 text-red-400 border-red-500/25; }
+  .cs-badge-high { @apply bg-orange-500/15 text-orange-400 border-orange-500/25; }
+  .cs-badge-medium { @apply bg-yellow-500/15 text-yellow-400 border-yellow-500/25; }
+  .cs-badge-low { @apply bg-emerald-500/15 text-emerald-400 border-emerald-500/25; }
+
+  /* ── Loading spinner ── */
+  .cs-spinner {
+    @apply w-10 h-10 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin;
+  }
+  .cs-spinner-sm {
+    @apply w-6 h-6 border-2 border-teal-500/20 border-t-teal-500 rounded-full animate-spin;
+  }
+
+  /* ── Error / alert box ── */
+  .cs-alert-error {
+    @apply p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-lg flex items-start gap-2;
+  }
+  .cs-alert-info {
+    @apply p-3 bg-teal-500/10 border border-teal-500/20 text-teal-300 text-xs rounded-lg;
+  }
+  .cs-alert-warn {
+    @apply p-2.5 text-xxs text-amber-400 bg-amber-500/5 border border-amber-500/10 rounded-lg;
+  }
+
+  /* ── Loading screen ── */
+  .cs-loading-screen {
+    @apply min-h-screen bg-slate-950 text-teal-400 flex flex-col items-center justify-center gap-3;
+  }
+
+  /* ── Table header row ── */
+  .cs-table-head {
+    @apply border-b border-slate-800 text-slate-500 text-xs uppercase tracking-wider;
+  }
+  .cs-table-row {
+    @apply border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors;
+  }
+  .cs-table-cell {
+    @apply px-4 py-3;
+  }
 }

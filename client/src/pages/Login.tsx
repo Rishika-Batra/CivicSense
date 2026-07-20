@@ -66,10 +66,10 @@ export const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -z-10 animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-10 animate-pulse" />
+      <div className="pointer-events-none absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -z-10 animate-pulse" />
+      <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-10 animate-pulse" />
 
-      <Card className="max-w-md w-full border-slate-800 bg-slate-900/60 backdrop-blur-lg shadow-2xl relative">
+      <Card className="max-w-md w-full cs-card backdrop-blur-lg shadow-2xl relative">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-12 h-12 bg-gradient-to-tr from-teal-500 to-emerald-400 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
             <Lock className="text-slate-950 size-5" />
@@ -85,14 +85,14 @@ export const Login: React.FC = () => {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {errorMsg && (
-              <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-lg flex items-start gap-2 animate-shake">
+              <div className="cs-alert-error animate-shake">
                 <AlertCircle className="size-4 mt-0.5 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-300">
+              <Label htmlFor="email" className="cs-label">
                 Email Address
               </Label>
               <div className="relative">
@@ -101,7 +101,7 @@ export const Login: React.FC = () => {
                   id="email"
                   type="email"
                   placeholder="name@example.com"
-                  className="pl-10 bg-slate-950/50 border-slate-800 focus:border-teal-500/60 text-slate-100"
+                  className="pl-10 cs-input"
                   {...register('email')}
                 />
               </div>
@@ -111,7 +111,7 @@ export const Login: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-300">
+              <Label htmlFor="password" className="cs-label">
                 Password
               </Label>
               <div className="relative">
@@ -120,7 +120,7 @@ export const Login: React.FC = () => {
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  className="pl-10 bg-slate-950/50 border-slate-800 focus:border-teal-500/60 text-slate-100"
+                  className="pl-10 cs-input"
                   {...register('password')}
                 />
               </div>
@@ -132,7 +132,7 @@ export const Login: React.FC = () => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-semibold py-2 rounded-lg transition duration-200 mt-2 shadow-lg shadow-teal-900/20"
+              className="w-full cs-btn-primary py-2 mt-2"
             >
               {isSubmitting ? 'Signing in...' : 'Sign In'}
             </Button>

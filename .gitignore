@@ -1,53 +1,16 @@
-# Dependencies
-node_modules/
-/dist
-/build
-.eslintcache
-.parcel-cache
-.cache
-.yarn-cache
-
-# Python environment
+# Python
 venv/
-.venv/
-env/
-.env/
-ENV/
-bin/
-include/
-ai-service/venv/lib/
-ai-service/lib/
-lib64/
-share/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-pip-log.txt
-pip-delete-this-directory.txt
-.ipynb_checkpoints
-.pytest_cache/
-.tox/
-.coverage
-htmlcov/
-.mypy_cache/
 
-# IDEs and editors
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Training artifacts
+ai-service/dataset_merged/
+ai-service/raw_datasets/
+ai-service/runs/
+ai-service/yolov8*.pt
+
+# macOS
 .DS_Store
 
-# Local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.env
-ai-service/training/
+# Node
+node_modules/

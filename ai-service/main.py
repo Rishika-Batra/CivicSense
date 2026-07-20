@@ -23,7 +23,7 @@ app.add_middleware(
 # ─── Model Selection & Loading ────────────────────────────────────────────────
 
 MODEL_DIR = "./models"
-CUSTOM_MODEL_PATH = os.path.join(MODEL_DIR, "best.onnx")
+CUSTOM_MODEL_PATH = os.path.join(MODEL_DIR, "civicsense_multiclass.pt")
 STOCK_MODEL_NAME = "yolov8n.pt"
 
 # Ensure models directory exists
@@ -124,7 +124,7 @@ async def predict_issue(file: UploadFile = File(...)):
         # Run inference using YOLOv8
         # We pass the original image or resized image. YOLO handles resizing internally,
         # but preprocessing is documented here per guidelines.
-        results = model(img_resized, conf=0.25) # Confidence threshold of 25%
+        results = model(img_resized, conf=0.05) # Confidence threshold of 25%
 
         best_category = "Other"
         best_confidence = 0.0

@@ -48,127 +48,168 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-900/20 via-slate-950 to-slate-950 -z-10" />
+    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="pointer-events-none absolute top-0 right-0 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-3xl -z-10" />
+      <div className="pointer-events-none absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/4 rounded-full blur-3xl -z-10" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-900/10 via-slate-950 to-slate-950 -z-10" />
 
-      <main className="max-w-2xl w-full bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl p-8 shadow-2xl space-y-6">
-        <header className="flex justify-between items-start border-b border-slate-800 pb-6">
+      <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-6">
+        {/* ── Page Header ─────────────────────────────────────────────────────── */}
+        <header className="cs-page-header">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-teal-500/20 bg-teal-500/10 text-teal-400 text-xs font-semibold uppercase tracking-wider mb-3">
-              Role: {user?.role}
+            <div className="cs-section-badge border-teal-500/20 bg-teal-500/10 text-teal-400">
+              Role: {user?.role?.toUpperCase()}
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-              Welcome, {user?.name}!
+            <h1 className="cs-page-title">
+              Welcome back, {user?.name}!
             </h1>
-            <p className="text-sm text-slate-400 mt-1">{user?.email}</p>
+            <p className="cs-page-subtitle">{user?.email}</p>
           </div>
-          <Button onClick={logout} className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-1.5 h-auto">
+          <Button
+            onClick={logout}
+            className="cs-btn-secondary text-xs px-4 py-2 h-auto self-start md:self-end"
+          >
             Sign Out
           </Button>
         </header>
 
-        <section className="space-y-6">
-          <div className="p-5 bg-slate-950/50 border border-slate-800 rounded-xl">
-            <h2 className="text-lg font-semibold text-teal-400 mb-2">Service Status Indicators</h2>
-            <p className="text-sm text-slate-400 mb-4">
-              Validate local api servers using Axios instance interceptors.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Server Checker */}
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800/80 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-medium text-slate-200">Express Server</h3>
-                  <p className="text-xs text-slate-400">Port 5000</p>
-                  <div className="mt-3 text-xs font-mono py-1.5 px-2 bg-slate-950 rounded text-teal-300 min-h-[2rem] flex items-center break-all">
-                    {serverStatus || 'Not tested yet'}
-                  </div>
-                </div>
-                <Button
-                  onClick={checkServer}
-                  disabled={checkingServer}
-                  className="mt-4 bg-teal-600 text-white hover:bg-teal-500 w-full"
-                >
-                  {checkingServer ? 'Checking...' : 'Check Server Connection'}
-                </Button>
-              </div>
-
-              {/* AI Service Checker */}
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800/80 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-medium text-slate-200">AI Service (FastAPI)</h3>
-                  <p className="text-xs text-slate-400">Port 8000</p>
-                  <div className="mt-3 text-xs font-mono py-1.5 px-2 bg-slate-950 rounded text-teal-300 min-h-[2rem] flex items-center break-all">
-                    {aiStatus || 'Not tested yet'}
-                  </div>
-                </div>
-                <Button
-                  onClick={checkAiService}
-                  disabled={checkingAi}
-                  className="mt-4 bg-teal-600 text-white hover:bg-teal-500 w-full"
-                >
-                  {checkingAi ? 'Checking...' : 'Check AI Connection'}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
+        {/* ── Quick Actions Grid ───────────────────────────────────────────────── */}
+        <section>
+          <h2 className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-3">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {user?.role === 'citizen' ? (
-              <Button
+              <button
                 onClick={() => navigate('/report')}
-                className="flex-1 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-semibold shadow-lg shadow-teal-900/20"
+                className="cs-card p-5 text-left hover:border-teal-500/40 hover:bg-slate-800/50 transition-all group"
               >
-                Report a New Issue
-              </Button>
+                <div className="w-10 h-10 bg-gradient-to-tr from-teal-500 to-emerald-400 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20 mb-3">
+                  <span className="text-slate-950 text-xl">📋</span>
+                </div>
+                <h3 className="font-bold text-slate-200 group-hover:text-teal-400 transition">Report a New Issue</h3>
+                <p className="text-xs text-slate-500 mt-1">File a civic complaint with photo proof and location pinning.</p>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={() => navigate('/officer')}
-                className="flex-1 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-semibold shadow-lg shadow-teal-900/20"
+                className="cs-card p-5 text-left hover:border-teal-500/40 hover:bg-slate-800/50 transition-all group"
               >
-                Go to Officer Dashboard
-              </Button>
+                <div className="w-10 h-10 bg-gradient-to-tr from-teal-500 to-emerald-400 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20 mb-3">
+                  <span className="text-slate-950 text-xl">🛡️</span>
+                </div>
+                <h3 className="font-bold text-slate-200 group-hover:text-teal-400 transition">Officer Dashboard</h3>
+                <p className="text-xs text-slate-500 mt-1">View and action assigned complaints in your workload console.</p>
+              </button>
             )}
-            <Button
-              onClick={() => navigate(user?.role === 'citizen' ? '/my-complaints' : '/officer')}
-              className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/60"
-            >
-              {user?.role === 'citizen' ? 'My Reported Issues' : 'Assigned Console'}
-            </Button>
-            <Button
-              onClick={() => navigate('/map')}
-              className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/60"
-            >
-              🗺️ City Map
-            </Button>
-          </div>
-          <div className="flex gap-4">
-            {user?.role === 'admin' && (
-              <Button
-                onClick={() => navigate('/admin')}
-                className="flex-1 bg-slate-900 border border-purple-800/40 hover:bg-slate-800 text-purple-400 text-xs py-1.5 h-auto"
-              >
-                Admin Console
-              </Button>
-            )}
-            {user?.role === 'admin' && (
-              <Button
-                onClick={() => navigate('/analytics')}
-                className="flex-1 bg-slate-900 border border-violet-800/40 hover:bg-slate-800 text-violet-400 text-xs py-1.5 h-auto"
-              >
-                Analytics Dashboard
-              </Button>
-            )}
-          </div>
 
-          <div className="text-center text-xs text-slate-500 border-t border-slate-800/60 pt-6">
-            CivicSense • Secure Session Managed in Context Memory
+            <button
+              onClick={() => navigate(user?.role === 'citizen' ? '/my-complaints' : '/officer')}
+              className="cs-card p-5 text-left hover:border-slate-700 hover:bg-slate-800/50 transition-all group"
+            >
+              <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">📂</span>
+              </div>
+              <h3 className="font-bold text-slate-200 group-hover:text-slate-100 transition">
+                {user?.role === 'citizen' ? 'My Reported Issues' : 'Assigned Console'}
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                {user?.role === 'citizen' ? 'Track status and resolution of your filed complaints.' : 'Manage and update your assigned complaint queue.'}
+              </p>
+            </button>
+
+            <button
+              onClick={() => navigate('/map')}
+              className="cs-card p-5 text-left hover:border-slate-700 hover:bg-slate-800/50 transition-all group"
+            >
+              <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">🗺️</span>
+              </div>
+              <h3 className="font-bold text-slate-200 group-hover:text-slate-100 transition">City Map View</h3>
+              <p className="text-xs text-slate-500 mt-1">Explore all civic complaints plotted on an interactive city map.</p>
+            </button>
+
+            {user?.role === 'admin' && (
+              <button
+                onClick={() => navigate('/admin')}
+                className="cs-card p-5 text-left hover:border-purple-500/30 hover:bg-slate-800/50 transition-all group"
+              >
+                <div className="w-10 h-10 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center mb-3">
+                  <span className="text-xl">⚙️</span>
+                </div>
+                <h3 className="font-bold text-purple-300 group-hover:text-purple-200 transition">Admin Console</h3>
+                <p className="text-xs text-slate-500 mt-1">Manage users, departments, and complaint assignments.</p>
+              </button>
+            )}
+
+            {user?.role === 'admin' && (
+              <button
+                onClick={() => navigate('/analytics')}
+                className="cs-card p-5 text-left hover:border-violet-500/30 hover:bg-slate-800/50 transition-all group"
+              >
+                <div className="w-10 h-10 bg-violet-500/10 border border-violet-500/20 rounded-xl flex items-center justify-center mb-3">
+                  <span className="text-xl">📊</span>
+                </div>
+                <h3 className="font-bold text-violet-300 group-hover:text-violet-200 transition">Analytics Dashboard</h3>
+                <p className="text-xs text-slate-500 mt-1">Real-time platform intelligence across all complaint data.</p>
+              </button>
+            )}
           </div>
         </section>
-      </main>
+
+        {/* ── Service Status ───────────────────────────────────────────────────── */}
+        <section>
+          <h2 className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-3">
+            Service Status Indicators
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Server Checker */}
+            <div className="cs-card p-5 flex flex-col gap-3">
+              <div>
+                <h3 className="font-semibold text-slate-200">Express Server</h3>
+                <p className="text-xs text-slate-500">Port 5000 — Node.js REST API</p>
+              </div>
+              <div className="text-xs font-mono py-2 px-3 bg-slate-950/80 rounded-lg border border-slate-800 text-teal-300 min-h-[2.5rem] flex items-center break-all">
+                {serverStatus || <span className="text-slate-600 italic">Not tested yet</span>}
+              </div>
+              <Button
+                onClick={checkServer}
+                disabled={checkingServer}
+                className="cs-btn-primary w-full py-2"
+              >
+                {checkingServer ? 'Checking...' : 'Check Server Connection'}
+              </Button>
+            </div>
+
+            {/* AI Service Checker */}
+            <div className="cs-card p-5 flex flex-col gap-3">
+              <div>
+                <h3 className="font-semibold text-slate-200">AI Service (FastAPI)</h3>
+                <p className="text-xs text-slate-500">Port 8000 — YOLOv8 Inference</p>
+              </div>
+              <div className="text-xs font-mono py-2 px-3 bg-slate-950/80 rounded-lg border border-slate-800 text-teal-300 min-h-[2.5rem] flex items-center break-all">
+                {aiStatus || <span className="text-slate-600 italic">Not tested yet</span>}
+              </div>
+              <Button
+                onClick={checkAiService}
+                disabled={checkingAi}
+                className="cs-btn-primary w-full py-2"
+              >
+                {checkingAi ? 'Checking...' : 'Check AI Connection'}
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <footer className="text-center text-xs text-slate-600 border-t border-slate-800/60 pt-6 pb-2">
+          CivicSense • Secure Session Managed in Context Memory
+        </footer>
+      </div>
     </div>
   )
 }
+
 
 
 function AppContent() {

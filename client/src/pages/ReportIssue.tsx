@@ -186,11 +186,7 @@ export const ReportIssue: React.FC = () => {
     formData.append('image', file)
 
     try {
-      const res = await api.post('/api/complaints/predict', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const res = await api.post('/api/complaints/predict', formData)
       if (res.data && res.data.success) {
         const { category, confidence } = res.data
         setAiSuggestion({ category, confidence })
@@ -219,11 +215,7 @@ export const ReportIssue: React.FC = () => {
     }
 
     try {
-      const res = await api.post('/api/complaints', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const res = await api.post('/api/complaints', formData)
       if (res.data && res.data.success) {
         setSubmitSuccess({
           id: res.data.complaint._id,

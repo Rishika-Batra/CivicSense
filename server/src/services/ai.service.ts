@@ -20,6 +20,7 @@ export const predictCategory = async (
   filename: string
 ): Promise<AIPredictionResult> => {
   const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000'
+  console.log("AI_SERVICE_URL =", aiServiceUrl)
 
   try {
     const formData = new FormData()

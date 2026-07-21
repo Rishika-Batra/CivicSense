@@ -24,6 +24,7 @@ export const setAuthToken = (token: string | null) => {
 // Request interceptor to automatically attach JWT token if present
 api.interceptors.request.use(
   (config) => {
+    console.log("TOKEN:", memoryToken);
     if (memoryToken) {
       config.headers.Authorization = `Bearer ${memoryToken}`
     }

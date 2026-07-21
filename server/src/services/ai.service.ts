@@ -42,7 +42,10 @@ export const predictCategory = async (
     clearTimeout(timeoutId)
 
     if (!response.ok) {
-      throw new Error(`AI Service HTTP error status ${response.status}`)
+      const text = await response.text();
+      console.error("AI STATUS:", response.status);
+      console.error("AI BODY:", text);
+      throw new Error(`AI Service HTTP error status `);
     }
 
     const duration = Date.now() - startTime

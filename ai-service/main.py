@@ -100,6 +100,8 @@ def health_check():
 
 @app.post("/predict")
 async def predict_issue(file: UploadFile = File(...)):
+    print("=== PREDICT REQUEST RECEIVED ===", flush=True)
+    print("filename:", file.filename, flush=True)
     # Verify file is an image
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only image file uploads are supported.")

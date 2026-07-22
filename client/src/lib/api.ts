@@ -5,9 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 export const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  
 })
 
 // Closed variable stored in memory to prevent localStorage token leaks (XSS vectors)

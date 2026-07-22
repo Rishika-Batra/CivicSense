@@ -91,8 +91,7 @@ def map_prediction(class_name: str) -> str:
 
 @app.get("/health")
 def health_check():
-    print("STEP 5", flush=True)
-        return {
+    return {
         "status": "healthy",
         "model_loaded": model.model_name if hasattr(model, 'model_name') else STOCK_MODEL_NAME,
         "using_custom_weights": is_custom,
@@ -101,7 +100,7 @@ def health_check():
 
 @app.post("/predict")
 async def predict_issue(file: UploadFile = File(...)):
-    print("=== PREDICT REQUEST RECEIVED ===", flush=True); print("STEP 1", flush=True)
+    print("=== PREDICT REQUEST RECEIVED ===", flush=True)
     print("filename:", file.filename, flush=True)
     # Verify file is an image
     if not file.content_type.startswith("image/"):
@@ -109,10 +108,8 @@ async def predict_issue(file: UploadFile = File(...)):
 
     try:
         # Read file contents into numpy buffer
-        print("STEP 2", flush=True)
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
-        print("STEP 3", flush=True)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         if img is None:
@@ -129,7 +126,6 @@ async def predict_issue(file: UploadFile = File(...)):
         # Run inference using YOLOv8
         # We pass the original image or resized image. YOLO handles resizing internally,
         # but preprocessing is documented here per guidelines.
-        print("STEP 4", flush=True)
         results = model(img_resized, conf=0.05) # Confidence threshold of 25%
 
         best_category = "Other"
@@ -165,7 +161,6 @@ async def predict_issue(file: UploadFile = File(...)):
                 best_category = highest_conf_detection["mapped_category"]
                 best_confidence = highest_conf_detection["confidence"]
 
-        print("STEP 5", flush=True)
         return {
             "category": best_category,
             "confidence": round(best_confidence, 4),
@@ -179,8 +174,7 @@ async def predict_issue(file: UploadFile = File(...)):
 
 @app.get("/")
 def read_root():
-    print("STEP 5", flush=True)
-        return {
+    return {
         "message": "Hello World from CivicSense AI Service",
         "status": "online",
         "model": "custom-best.onnx" if is_custom else "stock-yolov8n.pt",

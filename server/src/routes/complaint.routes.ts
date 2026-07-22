@@ -45,6 +45,7 @@ router.post(
   authorize('citizen'),
   upload.single('image'),
   async (req, res, next) => {
+    console.log("PREDICT FILE:", req.file)
     if (!req.file) {
       res.status(400).json({ success: false, message: 'No image uploaded.' })
       return

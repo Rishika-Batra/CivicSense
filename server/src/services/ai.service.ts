@@ -29,7 +29,7 @@ export const predictCategory = async (
 
     // Apply a 30-second AbortController timeout to prevent blocking client requests
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 30000)
+    const timeoutId = setTimeout(() => controller.abort(), 70000)
 
     const startTime = Date.now()
 

@@ -1,76 +1,80 @@
-/**
- * Service to interface with the FastAPI AI Service for image classification.
- */
-
 interface AIPredictionResult {
   category: string
   confidence: number
 }
 
-/**
- * Sends an image file buffer to the FastAPI AI service to classify the civic issue.
- * Automatically handles timeouts and service downtime by returning a fallback category.
- * 
- * @param fileBuffer - Buffer of the uploaded image
- * @param filename - Name of the file for the multipart form-data payload
- * @returns Object containing predicted category and confidence score
- */
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 export const predictCategory = async (
   fileBuffer: Buffer,
   filename: string
 ): Promise<AIPredictionResult> => {
   const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000'
-  console.log("AI_SERVICE_URL =", aiServiceUrl)
+  const maxAttempts = 3
+  const retryDelayMs = 4000
 
-  try {
-    const formData = new FormData()
-    const blob = new Blob([new Uint8Array(fileBuffer)], { type: 'image/jpeg' })
-    formData.append('file', blob, filename)
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const formData = new FormData()
+      const blob = new Blob([new Uint8Array(fileBuffer)], { type: 'image/jpeg' })
+      formData.append('file', blob, filename)
 
-    // Apply a 30-second AbortController timeout to prevent blocking client requests
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 70000)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 70000)
 
-    const startTime = Date.now()
-    console.log("START:", Date.now())
-    console.log("START:", Date.now())
-    const response = await fetch(`${aiServiceUrl}/predict`, {
-      method: 'POST',
-      body: formData,
-      signal: controller.signal,
-    })
+      const startTime = Date.now()
+      const response = await fetch(`${aiServiceUrl}/predict`, {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
 
-    clearTimeout(timeoutId)
+      if (!response.ok) {
+        const text = await response.text()
+        console.error("AI STATUS:", response.status)
+        console.error("AI BODY:", text)
+        throw new Error(`AI Service HTTP error status ${response.status}`)
+      }
 
-    if (!response.ok) {
-      const text = await response.text();
-      console.error("AI STATUS:", response.status);
-      console.error("AI BODY:", text);
-      throw new Error(`AI Service HTTP error status `);
+      const duration = Date.now() - startTime
+      console.log(`AI Service classification succeeded in ${duration}ms (attempt ${attempt})`)
+
+      const data = (await response.json()) as {
+        category: string
+        confidence: number
+        [key: string]: any
+      }
+      return {
+        category: data.category || 'Other',
+        confidence: data.confidence ?? 0.0,
+      }
+    } catch (err: any) {
+      const message = err?.message || String(err)
+      const isRetryable =
+        message.includes('terminated') ||
+        message.includes('aborted') ||
+        message.includes('ECONNRESET') ||
+        message.includes('fetch failed')
+
+      console.warn(`AI Service attempt ${attempt} failed: ${message}`)
+
+      if (attempt < maxAttempts && isRetryable) {
+        console.log(`Retrying in ${retryDelayMs}ms...`)
+        await sleep(retryDelayMs)
+        continue
+      }
+
+      console.warn(`AI Service classification query failed after ${attempt} attempt(s): ${message}. Defaulting to 'Other'.`)
+      return {
+        category: 'Other',
+        confidence: 0.0,
+      }
     }
+  }
 
-    console.log("END:", Date.now())
-    const duration = Date.now() - startTime
-    console.log("END:", Date.now(), "DURATION:", duration);
-    console.log(`✅ AI Service classification succeeded in ${duration}ms`)
-
-    const data = (await response.json()) as {
-      category: string
-      confidence: number
-      [key: string]: any
-    }
-
-    return {
-      category: data.category || 'Other',
-      confidence: data.confidence ?? 0.0,
-    }
-  } catch (err: any) {
-    console.warn(
-      `⚠️ AI Service classification query failed: ${err.message || err}. Defaulting to 'Other'.`
-    )
-    return {
-      category: 'Other',
-      confidence: 0.0,
-    }
+  return {
+    category: 'Other',
+    confidence: 0.0,
   }
 }

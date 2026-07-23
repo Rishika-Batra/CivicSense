@@ -32,7 +32,8 @@ export const predictCategory = async (
     const timeoutId = setTimeout(() => controller.abort(), 70000)
 
     const startTime = Date.now()
-
+    console.log("START:", Date.now())
+    console.log("START:", Date.now())
     const response = await fetch(`${aiServiceUrl}/predict`, {
       method: 'POST',
       body: formData,
@@ -48,7 +49,9 @@ export const predictCategory = async (
       throw new Error(`AI Service HTTP error status `);
     }
 
+    console.log("END:", Date.now())
     const duration = Date.now() - startTime
+    console.log("END:", Date.now(), "DURATION:", duration);
     console.log(`✅ AI Service classification succeeded in ${duration}ms`)
 
     const data = (await response.json()) as {

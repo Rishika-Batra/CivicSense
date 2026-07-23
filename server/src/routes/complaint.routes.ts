@@ -27,8 +27,6 @@ const router = Router()
  */
 router.post(
   '/',
-  authenticate,
-  authorize('citizen'),
   upload.single('image'),
   validate(createComplaintSchema),
   createComplaint
@@ -41,8 +39,6 @@ router.post(
  */
 router.post(
   '/predict',
-  authenticate,
-  authorize('citizen'),
   upload.single('image'),
   async (req, res, next) => {
     console.log("CONTENT-TYPE:", req.headers["content-type"])
@@ -70,21 +66,18 @@ router.post(
  * @desc   List complaints with filtering and pagination
  * @access Private (Officer and Admin only)
  */
-router.get('/', authenticate, authorize('officer', 'admin'), getComplaints)
 
 /**
  * @route  GET /api/complaints/my
  * @desc   Get complaints filed by currently authenticated citizen
  * @access Private (Citizen only)
  */
-router.get('/my', authenticate, authorize('citizen'), getMyComplaints)
 
 /**
  * @route  GET /api/complaints/:id
  * @desc   Get complaint by ID (Visibility restricted to author or officers/admins)
  * @access Private (All roles)
  */
-router.get('/:id', authenticate, getComplaintById)
 
 /**
  * @route  PATCH /api/complaints/:id/status
@@ -93,7 +86,6 @@ router.get('/:id', authenticate, getComplaintById)
  */
 router.patch(
   '/:id/status',
-  authenticate,
   authorize('officer', 'admin'),
   upload.single('image'),
   validate(updateStatusSchema),
@@ -107,7 +99,6 @@ router.patch(
  */
 router.patch(
   '/:id/assign',
-  authenticate,
   authorize('admin'),
   validate(assignComplaintSchema),
   assignComplaint

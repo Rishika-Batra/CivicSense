@@ -10,8 +10,8 @@ export const predictCategory = async (
   filename: string
 ): Promise<AIPredictionResult> => {
   const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000'
-  const maxAttempts = 3
-  const retryDelayMs = 4000
+  const maxAttempts = 6
+  const retryDelayMs = 10000
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {

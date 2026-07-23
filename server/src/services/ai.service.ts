@@ -33,7 +33,17 @@ export const predictCategory = async (
       if (!response.ok) {
         const text = await response.text()
         console.error("AI STATUS:", response.status)
-        console.error("AI BODY:", text)
+        console.error("AI BODY (truncated):", text.slice(0, 200))
+
+        const isRetryableStatus = response.status === 502 || response.status === 503 || response.status === 504
+
+        if (attempt < maxAttempts && isRetryableStatus) {
+          console.warn(`AI Service attempt ${attempt} failed: HTTP ${response.status} (service likely still starting)`)
+          console.log(`Retrying in ${retryDelayMs}ms...`)
+          await sleep(retryDelayMs)
+          continue
+        }
+
         throw new Error(`AI Service HTTP error status ${response.status}`)
       }
 
@@ -51,7 +61,7 @@ export const predictCategory = async (
       }
     } catch (err: any) {
       const message = err?.message || String(err)
-      const isRetryable =
+      const isRetryableError =
         message.includes('terminated') ||
         message.includes('aborted') ||
         message.includes('ECONNRESET') ||
@@ -59,7 +69,7 @@ export const predictCategory = async (
 
       console.warn(`AI Service attempt ${attempt} failed: ${message}`)
 
-      if (attempt < maxAttempts && isRetryable) {
+      if (attempt < maxAttempts && isRetryableError) {
         console.log(`Retrying in ${retryDelayMs}ms...`)
         await sleep(retryDelayMs)
         continue
